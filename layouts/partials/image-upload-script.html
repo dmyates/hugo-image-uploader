@@ -1,0 +1,61 @@
+{{ if eq hugo.Environment "development" }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  const dropZones = document.querySelectorAll('.image-upload-box');
+
+  dropZones.forEach(zone => {
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      zone.classList.add('dragover');
+    });
+
+    zone.addEventListener('dragleave', () => {
+      zone.classList.remove('dragover');
+    });
+
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      zone.classList.remove('dragover');
+
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        uploadFile(file, zone.dataset.uploadPath, zone);
+      }
+    });
+  });
+
+  function uploadFile(file, uploadPath, dropZone) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('path', uploadPath);
+
+    fetch('http://127.0.0.1:3001/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('File uploaded successfully:', data.path);
+        provideMarkdown(dropZone, data.path, file.name);
+      } else {
+        console.error('Upload failed:', data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+  function provideMarkdown(dropZone, imagePath, fileName) {
+    navigator.clipboard.writeText(imagePath);
+
+    // Update the drop zone to show the uploaded image
+    dropZone.classList = "";
+    dropZone.innerHTML = `<img src="${imagePath}" alt="${fileName}">`;
+  }
+});
+</script>
+{{ end }}

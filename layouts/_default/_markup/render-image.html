@@ -1,0 +1,9 @@
+{{ if and (eq hugo.Environment "development") (eq .Destination "") }}
+  {{ partial "image-upload-control.html" . }}
+{{ else }}
+<img src="{{ .Destination | safeURL }}"
+  {{- with .Text }} alt="{{ . }}"{{- end -}}
+  {{- with .Title }} title="{{ . }}"{{- end -}}
+>
+{{- /* chomp trailing newline */ -}}
+{{ end }}

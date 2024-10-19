@@ -1,0 +1,12 @@
+name = "Hugo Image Uploader"
+license = "MIT"
+licenselink = "https://github.com/dmyates/hugo-image-uploader/blob/master/LICENSE"
+description = "A Hugo theme component for easy image uploading in development mode."
+homepage = "https://github.com/dmyates/hugo-image-uploader"
+tags = ["image", "upload", "development"]
+features = ["image upload"]
+min_version = "0.93.0"
+
+[author]
+  name = "David Yates"
+  homepage = "https://davidyat.es"
